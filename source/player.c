@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-void player_init(player_t *player, float x, float y, SDL_Texture *sprite)
+void player_init(player_t *player, float x, float y, SDL_Texture *sprite, int sprite_width, int sprite_height)
 {
     if (player == NULL || sprite == NULL)
     {
@@ -27,6 +27,9 @@ void player_init(player_t *player, float x, float y, SDL_Texture *sprite)
     player->power_up_timer = 0;
 
     player->sprite = sprite;
+     player->sprite_width = sprite_width;
+    player->sprite_height = sprite_height;
+
     player->frame.x = 0;
     player->frame.y = 0;
     player->frame.w = PLAYER_WIDTH;
@@ -49,15 +52,15 @@ void player_update(player_t *player, float delta_time)
 
     player->lastFrameTime += delta_time;
 
-    if (player->lastFrameTime >= frame_duration)
+    if (player->lastFrameTime >= player->frame_duration)
     {
         // Next frame
         player->frame.x += PLAYER_WIDTH;
-        if (player->frame.x >= player->sprite->w)
+        if (player->frame.x >= player->sprite_width)
         {
             player->frame.x = 0;
         }
-        player->lastFrameTime -= frame_duration;
+        player->lastFrameTime -= player->frame_duration;
     }
 }
 
@@ -94,9 +97,10 @@ void player_set_direction(player_t *player, player_direction_t direction)
     }
 }
 
-
-void player_render(const player_t *player, SDL_Renderer *renderer) {
-    if (!player || !renderer || !player->sprite) {
+void player_render(const player_t *player, SDL_Renderer *renderer)
+{
+    if (!player || !renderer || !player->sprite)
+    {
         SDL_Log("player_render: player, renderer or sprite null!");
         return;
     }
@@ -105,11 +109,11 @@ void player_render(const player_t *player, SDL_Renderer *renderer) {
         player->position.renderX,
         player->position.renderY,
         PLAYER_WIDTH,
-        PLAYER_HEIGHT
-    };
+        PLAYER_HEIGHT};
 
-    //Current frame
-    if (SDL_RenderCopy(renderer, player->sprite, &player->frame, &dest_rect) != 0) {
+    // Current frame
+    if (SDL_RenderCopy(renderer, player->sprite, &player->frame, &dest_rect) != 0)
+    {
         SDL_Log("player_render: impossible draw player: %s", SDL_GetError());
     }
 }

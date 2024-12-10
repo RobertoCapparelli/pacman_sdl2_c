@@ -3,6 +3,14 @@
 #include "stb_image.h"
 #include "include\player.h"
 
+/* #define GRID_WIDTH 28
+#define GRID_HEIGHT 36
+
+char grid[GRID_HEIGHT][GRID_WIDTH] = {
+    {'W', 'W', 'W', 'W', 'W', 'W', 'W', ...}, // W = muro, P = pellet, E = vuoto
+    {'W', 'P', 'P', 'P', 'P', 'P', 'W', ...},
+    ...
+};*/
 int main(int argc, char **argv) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0) {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
